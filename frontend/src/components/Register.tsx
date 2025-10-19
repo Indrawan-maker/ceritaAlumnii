@@ -2,6 +2,7 @@ import Hero from "./Hero.tsx"
 import { useState } from "react"
 import { useNavigate } from "react-router";
 
+
 export default function Register() {
     const [fullname, setFullName] = useState("");
     const [nickname, setNickname] = useState("");
@@ -18,7 +19,7 @@ export default function Register() {
             email: email,
             password: password
         }
-        fetch("https://localhost:5137/register", {
+        fetch("http://localhost:5174/register", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -43,6 +44,7 @@ export default function Register() {
                             <input className="w-full h-full rounded-md focus:outline-none p-4"
                                 name="fullname"
                                 value={fullname}
+                                autoComplete="name"
                                 onChange={e => setFullName(e.target.value)}
                                 type="text" 
                                 placeholder="masukan nama lengkap" 
@@ -54,6 +56,7 @@ export default function Register() {
                             <input className="w-full h-full rounded-md focus:outline-none p-4"
                                 name="nickname"
                                 value={nickname}
+                                autoComplete="username"
                                 type="text"
                                 onChange={e => setNickname(e.target.value)}
                                 placeholder="masukan masukan nickname" 
@@ -65,6 +68,7 @@ export default function Register() {
                             <input className="w-full h-full rounded-md focus:outline-none p-4"
                                 name="email"
                                 value={email}
+                                autoComplete="email"
                                 type="email" 
                                 onChange={e => setEmail(e.target.value)}
                                 placeholder="masukan email" 
@@ -75,6 +79,7 @@ export default function Register() {
                         <div className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-white">
                             <input className="w-full h-full rounded-md focus:outline-none p-4"
                                 name="password"
+                                autoComplete="new-password"
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                                 type="password" placeholder="masukan password" required />

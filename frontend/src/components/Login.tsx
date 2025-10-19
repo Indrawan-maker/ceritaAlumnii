@@ -1,6 +1,8 @@
 import Hero from "./Hero.tsx"
 
 export default function Register() {
+
+    
     return (
         <>
         
@@ -10,12 +12,14 @@ export default function Register() {
         <section className="w-100 h-12 grid mb-8">
         <div className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-white">
             <input className="w-full h-full rounded-md focus:outline-none p-4"
+            autoComplete="current-password"
             type="text" placeholder="masukan masukan nickname" required/>
         </div>
         </section>
         <section className="w-100 h-12 grid mb-8">
         <div className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-white">
             <input className="w-full h-full rounded-md focus:outline-none p-4"
+            autoComplete="current-password"
             type="password" placeholder="masukan password" required/>
         </div>
         </section>
