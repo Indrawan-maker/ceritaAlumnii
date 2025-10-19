@@ -12,7 +12,6 @@ export default function LoginDaftar() {
 
     return (
         <>
-        
         <section className="flex items-center justify-center mt-12">
             <div className="flex items-center justify-center gap-8">
                 <div className="w-28 h-8">
