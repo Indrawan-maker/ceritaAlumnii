@@ -1,6 +1,6 @@
 import Hero from "./Hero.tsx"
 import { useState } from "react"
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 
 
 export default function Register() {
@@ -9,28 +9,22 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     async function handleSubmit(e: React.SyntheticEvent) {
         e.preventDefault()
-        const userInfo = {
-            fullname: fullname,
-            nickname: nickname,
-            email: email,
-            password: password
-        }
         fetch("http://localhost:5174/register", {
             method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(userInfo)
+            body: JSON.stringify({fullname, nickname, email, password}),
         }).then((response) => response.json()).then(() => {
         setFullName("")
         setNickname("")
         setEmail("")
         setPassword("")
-        navigate('/login', { replace: true })
+        // navigate('/login', { replace: true })
         })
     }
 
