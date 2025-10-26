@@ -7,8 +7,6 @@ import User from './models/userModel.js'
 
 const app = express()
 
-
-
 app.use(cors({origin: "http://localhost:5173"}))
 app.use(express.json())
 connectDB()
@@ -26,7 +24,7 @@ app.post("/api/register", async (req, res) => {
     if(!fullname || !nickname || !email || !password) {
         return res.status(400).json({message: 'please complete the input'})
     }
-    
+
     try {
         const newUser = await User.create({
             fullname,
