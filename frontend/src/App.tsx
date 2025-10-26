@@ -1,18 +1,12 @@
-import Hero from "./components/Hero"
-import LoginDaftar from "./components/LoginDaftar";
-import Submit from './components/Submit';
-import CeritaList from "./components/CeritaList"
+import Index from './components/Index'
 
 function App() {
+  
 
   return (
-    
-    <main className="bg-neutral-50 min-h-screen w-full">
-    <Hero />
-    <LoginDaftar />
-    <Submit />
-    <CeritaList />
-    </main>
+    <>
+    <Index />
+    </>
   )
 }
 

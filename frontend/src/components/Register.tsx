@@ -10,7 +10,7 @@ export default function Register() {
     const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const notify = () => toast('perhatikan lagi inputan mu!');
+    const notify = () => toast.error('perhatikan lagi inputan mu!');
 
     const navigate = useNavigate()
 

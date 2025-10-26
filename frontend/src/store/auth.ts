@@ -1,4 +1,4 @@
-import type { AuthState } from '../types/index'
+import type { AuthState } from '../types/index.ts'
 
 import { create } from 'zustand'
 

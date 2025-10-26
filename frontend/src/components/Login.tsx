@@ -25,8 +25,8 @@ export default function Register() {
 
             const loginData = await res.json()
             if(res.ok) {
-                console.log('login sukses', loginData)
-                login(loginData.nickname)
+                console.log('login sukses', loginData.user.nickname)
+                login(loginData.user.nickname)
                 setNickname('')
                 setPassword('')
                 navigate('/', { replace: true })
