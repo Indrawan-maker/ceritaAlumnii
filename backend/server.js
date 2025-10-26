@@ -68,16 +68,28 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/messages', async (req, res) => {
     const { message, title, nickname } = req.body
     try {
-        const message = await Messages.create({
+        const Mess = await Messages.create({
             message,
             title,
             nickname
         })
+        console.log(message, title, nickname)
+        return res.status(200).json({Message: 'succes create the message', data: Mess})
     } catch (error) {
         console.log(error)
-        return res.status(401).json({messages: 'message not normal'})
+        return res.status(401).json({Messages: 'message not normal'})
     }
-    res.status(200).json({message: 'succes create the message', data: message})
+})
+
+app.get('/api/messages', async (req, res) => {
+    try {
+        
+        const getAllMessage = await Messages.find().sort({ createdAt: -1 }).limit(10)
+        return res.status(200).json({Message: 'succes get all messages', data: getAllMessage})
+    } catch (error) {
+        return res.status(404).json({Message: 'get message fail'})
+    }
+
 })
 
 

@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 const { Schema, model } = mongoose
 
 const messageSchema = new Schema({
-    main_message: String,
+    message: String,
     title: String,
     nickname: String,
     like: String,
