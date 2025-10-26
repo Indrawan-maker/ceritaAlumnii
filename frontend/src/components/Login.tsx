@@ -1,12 +1,17 @@
 import Hero from "./Hero.tsx"
 import { useState } from 'react'
 import { ToastContainer, toast } from "react-toastify";
+import { auth } from "../store/auth.ts";
+import { useNavigate } from "react-router";
+
 
 export default function Register() {
     const [nickname, setNickname] = useState('')
     const [password, setPassword] = useState('')
-    const notify = () => toast('perhatikan lagi teks yang kamu input');
-
+    
+    const { login } = auth()
+    const navigate = useNavigate()
+    const notify = () => toast.error('data tidak ditemukan!');
     async function handleLogin(e: React.SyntheticEvent) {
         e.preventDefault()
         try {
@@ -20,18 +25,21 @@ export default function Register() {
 
             const loginData = await res.json()
             if(res.ok) {
-                alert('login berhasil')
-                console.log('login sukses',loginData)
+                console.log('login sukses', loginData)
+                login(loginData.nickname)
+                setNickname('')
+                setPassword('')
+                navigate('/', { replace: true })
+            } else {
+                notify()
             }
-            setNickname('')
-            setPassword('')
         } catch (error) {
             console.log(error)
         }
     }
     return (
         <>
-                    <ToastContainer position="top-right"
+<ToastContainer position="top-right"
 autoClose={5000}
 hideProgressBar={false}
 newestOnTop={false}
@@ -70,7 +78,7 @@ theme="light"
         </section>
         <section className="w-100 h-8 grid">
         <div className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-sky-200">
-            <button onClick={notify}
+            <button
             className="w-full h-full rounded-md focus:outline-none p-4"
             type="submit">daftar sekarang</button>
         </div>

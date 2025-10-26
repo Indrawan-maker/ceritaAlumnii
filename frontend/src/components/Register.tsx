@@ -10,7 +10,7 @@ export default function Register() {
     const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const notify = () => toast('perhatikan lagi teks yang kamu input');
+    const notify = () => toast('perhatikan lagi inputan mu!');
 
     const navigate = useNavigate()
 
@@ -32,6 +32,8 @@ export default function Register() {
         console.log(result)
         if(res.ok){
             navigate('/login', { replace: true })
+        } else {
+            notify()
         }
     }
         catch(error) {
@@ -104,7 +106,7 @@ theme="light"
                     </section>
                     <section className="w-100 h-8 grid">
                         <div className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-sky-200">
-                            <button onClick={notify}
+                            <button
                             className="w-full h-full rounded-md focus:outline-none p-4"
                                 type="submit">daftar sekarang</button>
                         </div>

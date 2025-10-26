@@ -26,7 +26,7 @@ app.post("/api/register", async (req, res) => {
     if(!fullname || !nickname || !email || !password) {
         return res.status(400).json({message: 'please complete the input'})
     }
-
+    
     try {
         const newUser = await User.create({
             fullname,
