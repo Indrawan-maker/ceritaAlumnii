@@ -3,6 +3,7 @@ import cors from "cors"
 import 'dotenv/config'
 import { connectDB } from "./db/dbConnection.js"
 import User from './models/userModel.js'
+import Messages from './models/messageModel.js'
 
 
 const app = express()
@@ -10,6 +11,7 @@ const app = express()
 app.use(cors({origin: "http://localhost:5173"}))
 app.use(express.json())
 connectDB()
+
 
 app.post("/api/register", async (req, res) => {
     const { fullname, nickname, email, password} = req.body
@@ -50,8 +52,6 @@ app.post('/api/login', async (req, res) => {
         return res.status(401).json({message: 'wrong password'})
     }
 
-
-
     console.log(user)
     res.json({
         message: 'login succesfull!',
@@ -63,6 +63,24 @@ app.post('/api/login', async (req, res) => {
         }
     })
 })
+
+
+app.post('/api/messages', async (req, res) => {
+    const { message, title, nickname } = req.body
+    try {
+        const message = await Messages.create({
+            message,
+            title,
+            nickname
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(401).json({messages: 'message not normal'})
+    }
+    res.status(200).json({message: 'succes create the message', data: message})
+})
+
+
 
 
 

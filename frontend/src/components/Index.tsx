@@ -30,7 +30,7 @@ export default function Index() {
                 backgroundColor: "#f9fafb", 
                 color: "#111827", 
             },
-            position: "top-right",
+            position: "top-right", 
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
