@@ -9,7 +9,7 @@ export type AuthState = {
 }
 
 export type Messages = {
-    id: string | null
+
     messageStored: string | null
     title: string | null,
     nicknameStored: string | null,
@@ -24,7 +24,7 @@ export interface cardMessage {
 }
 
 export interface fetchMessage {
-    _id : string
+
     title: string
     nickname: string
     message: string

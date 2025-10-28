@@ -5,6 +5,7 @@ import { connectDB } from "./db/dbConnection.js"
 import User from './models/userModel.js'
 import Messages from './models/messageModel.js'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 
 const app = express()
@@ -20,7 +21,6 @@ app.post("/api/register", async (req, res) => {
     const saltRound = 12
     const hashPasword = await bcrypt.hash(password, saltRound)
 
-    
         console.log(`data received from frontend: 
             ${fullname}
             ${nickname}
@@ -51,16 +51,21 @@ app.post('/api/login', async (req, res) => {
     if(!user) {
         return res.status(404).json({message: 'nick not found'})
     }
-    const Compare = await bcrypt.compare(password, user.password)
+    const Compare = bcrypt.compare(password, user.password)
 
     if(!Compare) {
         return res.status(401).json({message: 'wrong password'})
     }
+    const token = jwt.sign(
+        {id: user._id, nickname: user.nickname},
+        process.env.JWT_SECRET,
+        { expiresIn: '1d'}
+    )
 
     console.log(user)
     res.json({
         message: 'login succesfull!',
-        userId: user._id,
+        token,
         user: {
             fullname: user.fullname,
             nickname: user.nickname,
@@ -89,16 +94,6 @@ app.post('/api/messages', async (req, res) => {
 
 app.get('/api/messages', async (req, res) => {
     try {
-        
-        const getAllMessage = await Messages.find().sort({ createdAt: -1 }).limit(5)
-        return res.status(200).json(getAllMessage)
-    } catch (error) {
-        return res.status(404).json({Message: 'get message fail'})
-    }
-})
-
-app.get('/api/messages', async (req, res) => {
-    try {
         const skip = parseInt(req.query.skip) || 0
         console.log(skip)
         const limit = 5
@@ -112,7 +107,6 @@ app.get('/api/messages', async (req, res) => {
         return res.status(404).json({Message: 'get message fail'})
     }
 })
-
 
 
 app.listen(process.env.PORT, () => console.log(`Server running on PORT ${process.env.PORT}`))

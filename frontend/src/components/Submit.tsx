@@ -60,8 +60,9 @@ export default function Submit() {
                 nickname : nickname
             }).then((data => {
                 console.log('berhasil tersimpan di global state!', data)
-                isMessageSend(data._id, data.message, data.title, data.nickname)}))
-            // isMessageSend(messages._id, messages.message, messages.title, messages.nickname)
+                isMessageSend(data.message, data.title, data.nickname)
+            }
+        ))
             setMessage('')
             setTitle('')
             setNickname('')
@@ -77,7 +78,7 @@ export default function Submit() {
     return (
         <>
             <section className="grid justify-center items-center mt-22 comfortaa-custom">
-                {toastContainer}
+                
                 <div className="text-2xl font-normal mb-6 flex items-center justify-center">
                     <h1>Submit Ceritamu!</h1>
                 </div>
@@ -89,6 +90,7 @@ export default function Submit() {
                             name="message"
                             value={message}
                             onChange={e => setMessage(e.target.value)}
+                            minLength={3}
                             maxLength={100}
                             required
                         ></textarea>
@@ -99,6 +101,7 @@ export default function Submit() {
                                 name="title"
                                 onChange={e => setTitle(e.target.value)}
                                 value={title}
+                                minLength={3}
                                 maxLength={30}
                                 type="text" placeholder="Judul Cerita"
 
@@ -108,6 +111,7 @@ export default function Submit() {
                             <input className="text-center rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full"
                                 name="nickname"
                                 value={nickname}
+                                minLength={3}
                                 maxLength={30}
                                 onChange={e => setNickname(e.target.value)}
                                 type="text" placeholder="Nickname Pengirim"
@@ -118,6 +122,7 @@ export default function Submit() {
                             <button className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-sky-200 cursor-pointer"
                             >kirim</button>
                         </div>
+                        {toastContainer}
                     </div>
                 </form>
             </section>

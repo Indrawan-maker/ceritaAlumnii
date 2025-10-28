@@ -2,7 +2,6 @@ import Card from "./Card";
 import { useEffect, useState } from "react"
 import type { fetchMessage } from "../types/index.d.ts";
 import axios from "axios"
-import Loading from './Loading';
 
 
 //  ngulik lodash, dan zod
@@ -13,8 +12,6 @@ export default function CeritaList() {
     // const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
     const [skip, setSkip] = useState(0)
-
-
 
 const fetching  = async (newSkip = 0) => {
             try {
@@ -53,7 +50,7 @@ const handleLoadMore = () => {
         <section className="">
 
             <div className="mt-22">
-            <h1 className="text-xl font-bold comfortaa-custom text-center">Cerita dari Alumni-alumni</h1>
+            <h1 className="text-xl font-bold comfortaa-custom text-center">Cerita dari Alumni-Alumni</h1>
             </div>
             {
             fetchMessage.map((message,i) => {

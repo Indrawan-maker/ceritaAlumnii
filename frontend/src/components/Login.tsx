@@ -39,17 +39,7 @@ export default function Register() {
     }
     return (
         <>
-<ToastContainer position="top-right"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick={false}
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="light"
-/>
+
         <Hero />
         <main className="grid items-center justify-center mt-12 comfortaa-custom">
         <form onSubmit={handleLogin}>
@@ -59,6 +49,8 @@ theme="light"
             autoComplete="current-password"
             type="text" 
             name="nickname"
+            minLength={5}
+            maxLength={80}
             value={nickname}
             onChange={e => setNickname(e.target.value)}
             placeholder="masukan masukan nickname" 
@@ -71,6 +63,8 @@ theme="light"
             className="w-full h-full rounded-md focus:outline-none p-4"
             name="password"
             value={password}
+                        minLength={5}
+            maxLength={80}
             onChange={e => setPassword(e.target.value)}
             autoComplete="current-password"
             type="password" placeholder="masukan password" required/>
@@ -84,6 +78,17 @@ theme="light"
         </div>
         </section>
         </form>
+        <ToastContainer position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={false}
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
         </main>
         </>
     )
