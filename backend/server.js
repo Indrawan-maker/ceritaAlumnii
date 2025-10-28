@@ -4,6 +4,7 @@ import 'dotenv/config'
 import { connectDB } from "./db/dbConnection.js"
 import User from './models/userModel.js'
 import Messages from './models/messageModel.js'
+import bcrypt from 'bcrypt'
 
 
 const app = express()
@@ -15,6 +16,9 @@ connectDB()
 
 app.post("/api/register", async (req, res) => {
     const { fullname, nickname, email, password} = req.body
+
+    const saltRound = 12
+    const hashPasword = await bcrypt.hash(password, saltRound)
 
     
         console.log(`data received from frontend: 
@@ -32,7 +36,7 @@ app.post("/api/register", async (req, res) => {
             fullname,
             nickname,
             email,
-            password
+            password : hashPasword
         })
         return res.status(200).json({ message: 'berhasil login!', data: newUser})
     } catch (error) {
@@ -47,8 +51,9 @@ app.post('/api/login', async (req, res) => {
     if(!user) {
         return res.status(404).json({message: 'nick not found'})
     }
+    const Compare = await bcrypt.compare(password, user.password)
 
-    if(user.password !== password) {
+    if(!Compare) {
         return res.status(401).json({message: 'wrong password'})
     }
 
