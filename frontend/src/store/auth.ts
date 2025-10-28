@@ -13,9 +13,9 @@ export const auth = create<AuthState>((set) => ({
 
 export const Message = create<Messages>((set) => ({
     id: null,
-    message: null,
+    messageStored: null,
     title: null,
-    nickname: null,
-    isMessageSend: (id, messages, titles, nicknames) => set({id: id, message : messages, title : titles, nickname: nicknames}),
+    nicknameStored: null,
+    isMessageSend: (id, messages, titles, nicknames) => set({id: id, messageStored : messages, title : titles, nicknameStored: nicknames}),
 }))
 

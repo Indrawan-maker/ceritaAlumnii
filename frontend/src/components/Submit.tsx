@@ -1,56 +1,71 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import { FaCat } from "react-icons/fa";
-import { Message } from '../store/auth.ts'
+import { Message, auth } from '../store/auth.ts'
 
-export default function submit() {
+import axios from 'axios'
+
+export default function Submit() {
 
     const [message, setMessage] = useState('')
     const [title, setTitle] = useState('')
     const [nickname, setNickname] = useState('')
 
 
-    // const notify = useCallback(() => {
-    //     toast.success(`Halo ${users}`, {
-    //         style: {
-    //             border: "1px solid #6b7280",
-    //             borderRadius: "8px",
-    //             backgroundColor: "#f9fafb",
-    //             color: "#111827",
-    //         },
-    //         position: "top-right",
-    //         autoClose: 5000,
-    //         hideProgressBar: false,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         theme: "light",
-    //     });
-    // }, [users]);
 
-    // const toastContainer = <ToastContainer
-    //     icon={({ type }) => {
-    //         switch (type) {
-    //             case 'success':
-    //                 return <FaCat className="w-full" />;
-    //             default:
-    //                 return null;
-    //         }
-    //     }}
-    // />
+    const { isLoggedIn } = auth()
+    const { isMessageSend } = Message()
 
-    async function handleMessage() {
+
+    const notifyErr = () => toast.error('login dulu yu!');
+    const notify = useCallback(() => {
+        toast.success(`Judul Cerita ${title} berhasil terkirim!`, {
+            style: {
+                border: "1px solid #6b7280",
+                borderRadius: "8px",
+                backgroundColor: "#f9fafb",
+                color: "#111827",
+            },
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+        });
+    }, [title]);
+
+    const toastContainer = <ToastContainer
+        icon={({ type }) => {
+            switch (type) {
+                case 'success':
+                    return <FaCat className="w-full" />;
+                default:
+                    return null;
+            }
+        }}
+    />
+
+    async function handleMessage(e: React.SyntheticEvent) {
+        e.preventDefault()
+        console.log(message)
+        if (isLoggedIn === false) {
+            return notifyErr()
+        }
         try {
-            const res = await fetch('http://localhost:5174/api/messages', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message, title, nickname })
-            })
-            const messages = res.json()
-            Message(messages._id, messages.message, messages.title, messages.nickname)
+            await axios.post('http://localhost:5174/api/messages', {
+                message : message,
+                title : title,
+                nickname : nickname
+            }).then((data => {
+                console.log('berhasil tersimpan di global state!', data)
+                isMessageSend(data._id, data.message, data.title, data.nickname)}))
+            // isMessageSend(messages._id, messages.message, messages.title, messages.nickname)
             setMessage('')
             setTitle('')
             setNickname('')
+            notify()
         } catch (error) {
             console.log(error)
         }
@@ -62,8 +77,9 @@ export default function submit() {
     return (
         <>
             <section className="grid justify-center items-center mt-22 comfortaa-custom">
+                {toastContainer}
                 <div className="text-2xl font-normal mb-6 flex items-center justify-center">
-                    <h1>submit ceritamu!</h1>
+                    <h1>Submit Ceritamu!</h1>
                 </div>
                 <form className="flex items-center justify-center gap-8"
                     onSubmit={handleMessage}>
@@ -73,7 +89,8 @@ export default function submit() {
                             name="message"
                             value={message}
                             onChange={e => setMessage(e.target.value)}
-                            id=""
+                            maxLength={100}
+                            required
                         ></textarea>
                     </div>
                     <div>
@@ -82,14 +99,20 @@ export default function submit() {
                                 name="title"
                                 onChange={e => setTitle(e.target.value)}
                                 value={title}
-                                type="text" placeholder="Judul Cerita" />
+                                maxLength={30}
+                                type="text" placeholder="Judul Cerita"
+
+                            />
                         </div>
                         <div className="w-100 h-12 mb-4">
                             <input className="text-center rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full"
                                 name="nickname"
                                 value={nickname}
+                                maxLength={30}
                                 onChange={e => setNickname(e.target.value)}
-                                type="text" placeholder="Nickname Pengirim" />
+                                type="text" placeholder="Nickname Pengirim"
+                                required
+                            />
                         </div>
                         <div className="w-100 h-12 mb-4">
                             <button className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-sky-200 cursor-pointer"
