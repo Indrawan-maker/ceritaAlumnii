@@ -153,7 +153,7 @@ export default function Submit() {
                             value={message}
                             onChange={e => setMessage(e.target.value)}
                             minLength={3}
-                            maxLength={100}
+                            maxLength={300}
                             required
                         ></textarea>
                     </div>
@@ -164,7 +164,7 @@ export default function Submit() {
                                 onChange={e => setTitle(e.target.value)}
                                 value={title}
                                 minLength={3}
-                                maxLength={30}
+                                maxLength={45}
                                 type="text" placeholder="Judul Cerita"
 
                             />
@@ -174,7 +174,7 @@ export default function Submit() {
                                 name="nickname"
                                 value={nickname}
                                 minLength={3}
-                                maxLength={30}
+                                maxLength={45}
                                 onChange={e => setNickname(e.target.value)}
                                 type="text" placeholder="Nickname Pengirim"
                                 required
