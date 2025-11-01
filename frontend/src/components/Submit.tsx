@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import { FaCat } from "react-icons/fa";
 import { Message, auth } from '../store/auth.ts'
@@ -10,15 +10,20 @@ export default function Submit() {
     const [message, setMessage] = useState('')
     const [title, setTitle] = useState('')
     const [nickname, setNickname] = useState('')
+    const isMount = useRef(false)
 
 
 
-    const { isLoggedIn } = auth()
+    const { isLoggedIn, user } = auth()
     const { isMessageSend } = Message()
+
+        const users = user ?
+        user.charAt(0).toUpperCase() + user.slice(1) : ''
 
 
     const notifyErr = () => toast.error('login dulu yu!');
-    const notify = useCallback(() => {
+
+    const notifyMessage = () => {
         toast.success(`Judul Cerita ${title} berhasil terkirim!`, {
             style: {
                 border: "1px solid #6b7280",
@@ -34,7 +39,57 @@ export default function Submit() {
             draggable: true,
             theme: "light",
         });
-    }, [title]);
+    }
+
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const token = localStorage.getItem('token')
+            if(!token) {
+                console.log('belum login')
+                return
+            }
+
+            try {
+                const res = await axios.get('http://localhost:t5174/api/auth/profile', {
+                    headers : {'Authorization' : `Bearer ${token}`}
+                })
+                if(!res) {
+                    toast.error('token kadaluarsa, login ulang!')
+                    localStorage.removeItem('token')
+                } else {
+                    console.log('data jwt:' , res)
+                }
+            } catch(error) {
+                console.log(error)
+            }
+        }
+        checkAuth()
+    },[])
+
+    useEffect(() => {
+        if(!users) return
+                if(isMount.current) {
+            
+            toast.success(`Halo, ${users}!`, {
+                style: {
+                    border: "1px solid #6b7280",
+                    borderRadius: "8px",
+                    backgroundColor: "#f9fafb",
+                    color: "#111827",
+                },
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light",
+            })
+        } else {
+            isMount.current = true
+        }
+    },[users])
 
     const toastContainer = <ToastContainer
         icon={({ type }) => {
@@ -54,19 +109,26 @@ export default function Submit() {
             return notifyErr()
         }
         try {
-            await axios.post('http://localhost:5174/api/messages', {
-                message : message,
-                title : title,
-                nickname : nickname
-            }).then((data => {
-                console.log('berhasil tersimpan di global state!', data)
-                isMessageSend(data.message, data.title, data.nickname)
+            const token = localStorage.getItem('token')
+            const res = await axios.post(
+                'http://localhost:5174/api/messages', {
+                message,
+                title,
+                nickname
+            },{
+                headers: {
+                    'Authorization' : `Bearer ${token}`,
+                    'Content-Type' : 'application/json'
+                }
             }
-        ))
+        )
+        isMessageSend(res.data._id, res.data.message, res.data.title, res.data.nickname)
+        console.log(res)
+        console.log(res.data)
             setMessage('')
             setTitle('')
             setNickname('')
-            notify()
+            notifyMessage()
         } catch (error) {
             console.log(error)
         }
@@ -122,10 +184,10 @@ export default function Submit() {
                             <button className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-sky-200 cursor-pointer"
                             >kirim</button>
                         </div>
-                        {toastContainer}
                     </div>
                 </form>
             </section>
+                        {toastContainer}
         </>
     )
 }

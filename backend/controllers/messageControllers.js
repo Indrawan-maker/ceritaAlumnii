@@ -1,4 +1,4 @@
-import Messages from './models/messageModel.js'
+import Messages from '../models/messageModel.js'
 
 export const createMessage = async (req, res) => {
     const { message, title, nickname } = req.body

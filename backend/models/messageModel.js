@@ -7,9 +7,7 @@ const messageSchema = new Schema({
     nickname: String,
     like: String,
     comment: String
-},{
-    timestamps: true
-}
+},{ timestamps: true }
 )
 
 const Messages = model('Messages', messageSchema)

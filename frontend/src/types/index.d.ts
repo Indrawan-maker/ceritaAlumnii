@@ -9,7 +9,7 @@ export type AuthState = {
 }
 
 export type Messages = {
-
+    id : string | null
     messageStored: string | null
     title: string | null,
     nicknameStored: string | null,

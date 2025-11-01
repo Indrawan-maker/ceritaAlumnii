@@ -12,9 +12,10 @@ export const auth = create<AuthState>((set) => ({
 }))
 
 export const Message = create<Messages>((set) => ({
+    id: null,
     messageStored: null,
     title: null,
     nicknameStored: null,
-    isMessageSend: ( messages, titles, nicknames) => set({ messageStored : messages, title : titles, nicknameStored: nicknames}),
+    isMessageSend: ( id, messages, titles, nicknames) => set({ id: id, messageStored : messages, title : titles, nicknameStored: nicknames}),
 }))
 

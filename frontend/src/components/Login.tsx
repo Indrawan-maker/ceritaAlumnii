@@ -5,7 +5,7 @@ import { auth } from "../store/auth.ts";
 import { useNavigate } from "react-router";
 
 
-export default function Register() {
+export default function Login() {
     const [nickname, setNickname] = useState('')
     const [password, setPassword] = useState('')
     
@@ -15,7 +15,7 @@ export default function Register() {
     async function handleLogin(e: React.SyntheticEvent) {
         e.preventDefault()
         try {
-            const res = await fetch("http://localhost:5174/api/login", {
+            const res = await fetch("http://localhost:5174/api/auth/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'
@@ -25,6 +25,7 @@ export default function Register() {
 
             const loginData = await res.json()
             if(res.ok) {
+                localStorage.setItem('token', loginData.token)
                 console.log('login sukses', loginData.user.nickname)
                 login(loginData.user._id ,loginData.user.nickname)
                 setNickname('')

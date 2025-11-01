@@ -1,9 +1,9 @@
 import express from "express"
 import cors from "cors"
-import 'dotenv/config'
-import { connectDB } from "./db/dbConnection.js"
+import { connectDB } from "./config/db.js"
 import authRoutes from './routes/authRoutes.js'
 import messageRoutes from './routes/messagesRoutes.js'
+import 'dotenv/config'
 
 
 
@@ -14,4 +14,6 @@ app.use(express.json())
 connectDB()
 
 app.use('/api/auth', authRoutes)
-app.use('/api/messages')
+app.use('/api/messages', messageRoutes)
+
+export default app

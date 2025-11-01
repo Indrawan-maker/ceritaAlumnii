@@ -4,17 +4,22 @@ import { generateToken } from '../services/jwtServices.js'
 
 export const register = async (req, res) => {
         const { fullname, nickname, email, password} = req.body
-        
+
+        if(!fullname || !nickname || !email || !password) {
+return res.status(400).json({message: 'please complete the input'})
+}
+        const existingUser = await User.findOne({ email })
+        if(existingUser) {
+            return res.status(400).json({message : `user ${existingUser} already exist`})
+        }
         console.log(`data received from frontend: 
             ${fullname}
             ${nickname}
             ${email}
             ${password}`)
-                if(!fullname || !nickname || !email || !password) {
-        return res.status(400).json({message: 'please complete the input'})
-    }
     const hashedPassword = await hashPassword(password)
     console.log(hashedPassword)
+
     try {
         const newUser = await User.create({
                     fullname,
@@ -22,7 +27,7 @@ export const register = async (req, res) => {
                     email,
                     password : hashedPassword
                 })
-                return res.status(200).json({ message: 'berhasil login!', data: newUser})
+                return res.status(200).json({ message: 'berhasil regist!', data: newUser})
     } catch (error) {
         return res.status(404).json({message: error})
     }
@@ -35,16 +40,13 @@ export const login = async (req, res) => {
     if(!user) {
         return res.status(404).json({message: 'nick not found'})
     }
-    const comparedPassword = await comparePassword(password, user.password)
+    const isMatch = await comparePassword(password, user.password)
+    const token = generateToken({id: user._id, email: user.email})
 
-    if(!comparedPassword) {
+    if(!isMatch) {
         return res.status(401).json({message: 'wrong password'})
     }
-    const token = jwt.sign(
-        {id: user._id, nickname: user.nickname},
-        process.env.JWT_SECRET,
-        { expiresIn: '1d'}
-    )
+
 
     console.log(user)
     res.json({
@@ -55,5 +57,13 @@ export const login = async (req, res) => {
             nickname: user.nickname,
             email: user.email
         }
+    })
+}
+
+export const profile = (req, res) => {
+    console.log(req.user)
+    res.json({ 
+        message: "Welcome to your profile!",
+        user: req.user
     })
 }
