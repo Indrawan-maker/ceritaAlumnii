@@ -5,8 +5,9 @@ const messageSchema = new Schema({
     message: String,
     title: String,
     nickname: String,
-    like: String,
-    comment: String
+    likes: {type : Number, default: 0},
+    shares: {type : Number, default: 0},
+    comment: {type: Number, default: 0}
 },{ timestamps: true }
 )
 
