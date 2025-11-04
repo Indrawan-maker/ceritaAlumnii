@@ -5,11 +5,11 @@ import axios from "axios"
 
 
 //  ngulik lodash, dan zod
+// https://reactrouter.com/start/declarative/url-values
 
 export default function CeritaList() {
 
     const [fetchMessage, setFetchMessage] = useState<fetchMessage[]>([])
-    // const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
     const [skip, setSkip] = useState(0)
 
@@ -20,13 +20,11 @@ const fetching  = async (newSkip = 0) => {
                 if(newSkip === 0) {
                     setFetchMessage(res.data)
                 } else {
-                    
                     setFetchMessage((prevMsg) => [...prevMsg, ...res.data])
                 }
                 console.log(res.data)
             } catch (error) {
                 console.log(error)
-                // setError(error.message)
             } finally {
                 setLoading(false)
             }

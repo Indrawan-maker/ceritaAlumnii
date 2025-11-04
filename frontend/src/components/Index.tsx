@@ -3,7 +3,7 @@ import LoginDaftar from "./LoginDaftar";
 import Submit from './Submit';
 import CeritaList from "./CeritaList"
 import { auth } from '../store/auth.ts'
-
+import { GoToProfile } from "./GoToProfile.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import '../index.css'
 
@@ -24,8 +24,8 @@ export default function Index() {
 
 
     return (
-        <main className="bg-neutral-50 min-h-screen w-full">
-
+        <main className="bg-neutral-50 min-h-screen w-full p-4">
+            <GoToProfile />
             <Hero />
             {isLoggedIn ? null : <LoginDaftar />}
             <Submit />

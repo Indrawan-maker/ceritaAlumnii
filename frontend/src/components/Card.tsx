@@ -5,21 +5,65 @@ import { LiaCommentAltSolid } from "react-icons/lia";
 import { FaDiamond } from "react-icons/fa6";
 import { Link } from 'react-router'
 import ModalShare from '../lib/ModalShare.tsx'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { upperFirstText } from '../utils/upperFirstText.ts';
+import axios from 'axios'
+
+
 
 
 
 export default function Card({ title, nickname, messages } : cardMessage):JSX.Element {
 
-    const [isDiamondClicked, setIsDiamondClick] = useState(false)
+    const [isDiamondClicked, setIsDiamondClicked] = useState(false)
+    const [diamondValue, setDiamondValue] = useState(0)
+    const [isCommentClicked, setIsCommentClicked] = useState(false)
+    const [commentValue, setCommentValue] = useState(0)
+    const [isShareClicked, setIsShareClicked] = useState(false)
+    const [shareValue, setShareValue] = useState(0)
 
     const handleDiamond = () => {
-        setIsDiamondClick( prev => !prev)
+        setIsDiamondClicked( prev => !prev )
+        if(!isDiamondClicked) {setDiamondValue(prev => prev + 1)} else {setDiamondValue(prev => prev - 1)}
+    }
+    const handleComment = () => {
+        setIsCommentClicked( prev => !prev )
+        if(!isCommentClicked) {setCommentValue(prev => prev + 1)} else {setCommentValue(prev => prev - 1)}
+    }
+    const handleShare = () => {
+        setIsShareClicked( prev => !prev )
+        if(!isShareClicked) {setShareValue(prev => prev + 1)}
     }
     
-    const upperNick = nickname.charAt(0).toUpperCase() + nickname.slice(1)
-    const upperTitle = title.charAt(0).toUpperCase() + title.slice(1)
-    const upperMessage = messages.charAt(0).toUpperCase() + messages.slice(1)
+    const upperNick = upperFirstText(nickname)
+    const upperTitle = upperFirstText(title)
+    const upperMessage = upperFirstText(messages)
+
+    const postDiamond = async () => {
+        try {
+            const token = localStorage.getItem('token')
+            if(!token) return
+            const res = await axios.post('http://localhost:5174/api/messages',
+                {
+                    diamondValue,
+                    commentValue,
+                    shareValue
+                }, {
+                headers : {
+                    'Authorization' : `Bearer ${token}`,
+                    'Content-Type' : 'application/json'
+                }
+            }
+            )
+            console.log(res.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        postDiamond()
+    })
     
     return (
         <main className="grid items-center justify-center mt-12 comfortaa-custom">
@@ -38,13 +82,13 @@ export default function Card({ title, nickname, messages } : cardMessage):JSX.El
             <div className='mt-auto flex justify-end'>
                 <ul className='flex gap-4 justify-between text-right absolute bottom-4 right-4 items-center'>
                     <li className='cursor-pointer text-2xl' onClick={handleDiamond}> {isDiamondClicked ? <FaDiamond /> : <GoDiamond />}</li>
-                    <li className='text-[10px] font-extralight -translate-x-2'>Diamond • 0</li>
-                    <Link to='/messages/:comment'><li className='cursor-pointer text-2xl'><LiaCommentAltSolid /></li> </Link>
-                    <li className='text-[10px] font-extralight -translate-x-2'>0</li>
-                    <li className='cursor-pointer text-4xl'>
+                    <li className='text-[10px] font-extralight -translate-x-2'>Diamond • {diamondValue}</li>
+                    <Link to='/messages/:comment'><li className='cursor-pointer text-2xl' onClick={handleComment}><LiaCommentAltSolid /></li> </Link>
+                    <li className='text-[10px] font-extralight -translate-x-2'>{commentValue}</li>
+                    <li className='cursor-pointer text-4xl' onClick={handleShare}>
                     <ModalShare />
                     </li>
-                    <li className='text-[10px] font-extralight -translate-x-2'>0</li>
+                    <li className='text-[10px] font-extralight -translate-x-2'>{shareValue}</li>
                 </ul>
             </div>
             </section>
