@@ -1,4 +1,5 @@
 import Messages from '../models/messageModel.js'
+import { io } from "../socket.js"
 
 export const createMessage = async (req, res) => {
     const { message, title, nickname } = req.body
@@ -10,10 +11,11 @@ export const createMessage = async (req, res) => {
         })
         console.log(message, title, nickname)
         console.log(Mess)
+        io.emit("new-message", Mess)
         return res.status(200).json(Mess)
     } catch (error) {
         console.log(error)
-        return res.status(401).json({Messages: 'message not normal'})
+        return res.status(500).json({Messages: '/api/messages'})
     }
 }
 
@@ -25,7 +27,7 @@ export const getMessage = async (req, res) => {
         try {
         const getAllMessage = await Messages
         .find()
-        .sort({ createdAt: 1 })
+        .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         return res.status(200).json(getAllMessage)

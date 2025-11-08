@@ -9,7 +9,7 @@ export const GoToProfile = () => {
             <img className='w-full h-full rounded-full'
             src={profile} alt="profile" />
         </div>
-            </Link>;
+            </Link>
         </>
     )
 }

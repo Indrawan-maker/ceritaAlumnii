@@ -2,22 +2,42 @@ import { useState, useEffect, useRef } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import { FaCat } from "react-icons/fa";
 import { Message, auth } from '../store/auth.ts'
-
+import { io } from "socket.io-client"
+import type { MessageData } from '../types/index';
 import axios from 'axios'
+import Card from './Card.tsx';
 
 export default function Submit() {
 
     const [message, setMessage] = useState('')
     const [title, setTitle] = useState('')
     const [nickname, setNickname] = useState('')
+    const [allMessage, setAllMessage] = useState<MessageData[]>([])
+
     const isMount = useRef(false)
+
+
+    useEffect(() => {
+        const socket = io("http://localhost:5174")
+
+        socket.on("connect", () => {
+            console.log(`Socket connected with id: ${socket.id}`)
+        })
+
+        socket.on("new-message", (newMsg) => {
+            setAllMessage(prev => [newMsg, ...prev])
+        })
+
+        return () => { socket.disconnect() }
+    }, [])
+
 
 
 
     const { isLoggedIn, user } = auth()
     const { isMessageSend } = Message()
 
-        const users = user ?
+    const users = user ?
         user.charAt(0).toUpperCase() + user.slice(1) : ''
 
 
@@ -45,32 +65,33 @@ export default function Submit() {
     useEffect(() => {
         const checkAuth = async () => {
             const token = localStorage.getItem('token')
-            if(!token) {
+            if (!token) {
                 console.log('belum login')
                 return
             }
-
             try {
-                const res = await axios.get('http://localhost:t5174/api/auth/profile', {
-                    headers : {'Authorization' : `Bearer ${token}`}
+                const res = await axios.get('http://localhost:5174/api/auth/profile', {
+                    headers: { 'Authorization': `Bearer ${token}` }
                 })
-                if(!res) {
+                if (!res) {
                     toast.error('token kadaluarsa, login ulang!')
                     localStorage.removeItem('token')
                 } else {
-                    console.log('data jwt:' , res)
+                    console.log('data jwt:', res)
                 }
-            } catch(error) {
+            } catch (error) {
                 console.log(error)
             }
         }
         checkAuth()
-    },[])
+    }, [])
+
+
 
     useEffect(() => {
-        if(!users) return
-                if(isMount.current) {
-            
+        if (!users) return
+        if (isMount.current) {
+
             toast.success(`Halo, ${users}!`, {
                 style: {
                     border: "1px solid #6b7280",
@@ -89,7 +110,7 @@ export default function Submit() {
         } else {
             isMount.current = true
         }
-    },[users])
+    }, [users])
 
     const toastContainer = <ToastContainer
         icon={({ type }) => {
@@ -115,16 +136,17 @@ export default function Submit() {
                 message,
                 title,
                 nickname
-            },{
+            }, {
                 headers: {
-                    'Authorization' : `Bearer ${token}`,
-                    'Content-Type' : 'application/json'
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             }
-        )
-        isMessageSend(res.data._id, res.data.message, res.data.title, res.data.nickname)
-        console.log(res)
-        console.log(res.data)
+            )
+            setAllMessage(prev => [res.data, ...prev])
+            isMessageSend(res.data._id, res.data.message, res.data.title, res.data.nickname)
+            console.log(res)
+            console.log(res.data)
             setMessage('')
             setTitle('')
             setNickname('')
@@ -136,10 +158,12 @@ export default function Submit() {
 
 
 
+
+
     return (
         <>
             <section className="grid justify-center items-center mt-22 comfortaa-custom">
-                
+
                 <div className="text-2xl font-normal mb-6 flex items-center justify-center">
                     <h1>Submit Ceritamu!</h1>
                 </div>
@@ -166,7 +190,7 @@ export default function Submit() {
                                 maxLength={40}
                                 type="text" placeholder="Judul Cerita"
 
-                            /> 
+                            />
                         </div>
                         <div className="w-80 md:w-100 h-12 mb-4">
                             <input className="text-center rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full"
@@ -185,8 +209,15 @@ export default function Submit() {
                         </div>
                     </div>
                 </form>
+                <div className="mx-auto">
+                    {allMessage.map((message,i) => 
+                    <div key={i}>
+                    <Card title={message.title} nickname={message.nickname} messages={message.message} />
+                    </div>
+                    )}
+                </div>
             </section>
-                        {toastContainer}
+            {toastContainer}
         </>
     )
 }
