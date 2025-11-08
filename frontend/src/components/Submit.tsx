@@ -143,9 +143,9 @@ export default function Submit() {
                 <div className="text-2xl font-normal mb-6 flex items-center justify-center">
                     <h1>Submit Ceritamu!</h1>
                 </div>
-                <form className="flex items-center justify-center gap-8"
+                <form className="grid md:flex items-center justify-center gap-8"
                     onSubmit={handleMessage}>
-                    <div className="w-100 h-45">
+                    <div className="w-80 md:w-100 h-45">
                         <textarea className="rounded-md border px-4 py-4 border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-sky-200"
                             placeholder='"dulu pas PBAK saya botak 2cm"'
                             name="message"
@@ -157,18 +157,18 @@ export default function Submit() {
                         ></textarea>
                     </div>
                     <div>
-                        <div className="w-100 h-12 mb-4 mt-2">
+                        <div className="w-80 md:w-100 h-12 mb-4 mt-2">
                             <input className="text-center rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full"
                                 name="title"
                                 onChange={e => setTitle(e.target.value)}
                                 value={title}
                                 minLength={3}
-                                maxLength={45}
+                                maxLength={40}
                                 type="text" placeholder="Judul Cerita"
 
-                            />
+                            /> 
                         </div>
-                        <div className="w-100 h-12 mb-4">
+                        <div className="w-80 md:w-100 h-12 mb-4">
                             <input className="text-center rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full"
                                 name="nickname"
                                 value={nickname}
@@ -179,7 +179,7 @@ export default function Submit() {
                                 required
                             />
                         </div>
-                        <div className="w-100 h-12 mb-4">
+                        <div className="w-80 md:w-100 h-12 mb-4">
                             <button className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-sky-200 cursor-pointer"
                             >kirim</button>
                         </div>

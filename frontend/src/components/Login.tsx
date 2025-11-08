@@ -44,7 +44,7 @@ export default function Login() {
         <Hero />
         <main className="grid items-center justify-center mt-12 comfortaa-custom">
         <form onSubmit={handleLogin}>
-        <section className="w-100 h-12 grid mb-8">
+        <section className="w-80 md:w-100 h-12 grid mb-8">
         <div className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-white">
             <input className="w-full h-full rounded-md focus:outline-none p-4"
             autoComplete="current-password"
@@ -58,7 +58,7 @@ export default function Login() {
             required/>
         </div>
         </section>
-        <section className="w-100 h-12 grid mb-8">
+        <section className="w-80 md:w-100 h-12 grid mb-8">
         <div className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-white">
             <input 
             className="w-full h-full rounded-md focus:outline-none p-4"
@@ -71,7 +71,7 @@ export default function Login() {
             type="password" placeholder="masukan password" required/>
         </div>
         </section>
-        <section className="w-100 h-8 grid">
+        <section className="w-80 md:w-100 h-8 grid">
         <div className="rounded-md border border-black shadow-[8px_8px_0px_black] hover:shadow-[2px_2px_0px_black] hover:translate-y-1 transition h-full w-full bg-sky-200">
             <button
             className="w-full h-full rounded-md focus:outline-none p-4"

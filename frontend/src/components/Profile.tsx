@@ -158,7 +158,7 @@ export const Profile = () => {
                                 alt="to crop"
                             />
                         </ReactCrop>
-                        <div className='flex justify-center items-center'>
+                        <div className='flex justify-start items-center'>
                         <button
                             className="text-black text-xs py-2 px-4 border mt-4"
                             onClick={handlePreview}
