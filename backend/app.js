@@ -5,11 +5,7 @@ import authRoutes from './routes/authRoutes.js'
 import messageRoutes from './routes/messagesRoutes.js'
 import 'dotenv/config'
 
-
-
-
 const app = express()
-
 
 app.use(cors({origin: "http://localhost:5173"}))
 app.use(express.json())

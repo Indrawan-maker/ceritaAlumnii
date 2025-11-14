@@ -40,13 +40,13 @@ export const login = async (req, res) => {
     if(!user) {
         return res.status(404).json({message: 'nick not found'})
     }
+    
     const isMatch = await comparePassword(password, user.password)
     const token = generateToken({id: user._id, email: user.email})
 
     if(!isMatch) {
         return res.status(401).json({message: 'wrong password'})
     }
-
 
     console.log(user)
     res.json({

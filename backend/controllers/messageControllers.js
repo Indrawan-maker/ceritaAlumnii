@@ -9,9 +9,9 @@ export const createMessage = async (req, res) => {
             title,
             nickname
         })
+        io.emit("new-message", Mess)
         console.log(message, title, nickname)
         console.log(Mess)
-        io.emit("new-message", Mess)
         return res.status(200).json(Mess)
     } catch (error) {
         console.log(error)
@@ -23,11 +23,11 @@ export const getMessage = async (req, res) => {
     const skip = parseInt(req.query.skip) || 0
     console.log(skip)
     const limit = 5
-    
+
         try {
         const getAllMessage = await Messages
         .find()
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: 1 })
         .skip(skip)
         .limit(limit)
         return res.status(200).json(getAllMessage)

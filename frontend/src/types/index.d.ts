@@ -1,6 +1,4 @@
-
-
-export type AuthState = {
+export interface AuthState  {
     id: string | null
     user: string | null
     isLoggedIn: boolean
@@ -31,7 +29,6 @@ export interface cardMessage {
 }
 
 export interface fetchMessage {
-
     title: string
     nickname: string
     message: string

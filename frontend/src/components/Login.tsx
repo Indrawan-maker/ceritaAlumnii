@@ -1,7 +1,7 @@
 import Hero from "./Hero.tsx"
 import { useState } from 'react'
 import { ToastContainer, toast } from "react-toastify";
-import { auth } from "../store/auth.ts";
+import { authStore } from "../store/authStore.ts";
 import { useNavigate } from "react-router";
 
 
@@ -9,9 +9,11 @@ export default function Login() {
     const [nickname, setNickname] = useState('')
     const [password, setPassword] = useState('')
     
-    const { login } = auth()
+    const { login } = authStore()
     const navigate = useNavigate()
     const notify = () => toast.error('data tidak ditemukan!');
+
+    
     async function handleLogin(e: React.SyntheticEvent) {
         e.preventDefault()
         try {
@@ -22,7 +24,6 @@ export default function Login() {
                 },
                 body: JSON.stringify({nickname, password})
             })
-
             const loginData = await res.json()
             if(res.ok) {
                 localStorage.setItem('token', loginData.token)
@@ -40,7 +41,6 @@ export default function Login() {
     }
     return (
         <>
-
         <Hero />
         <main className="grid items-center justify-center mt-12 comfortaa-custom">
         <form onSubmit={handleLogin}>

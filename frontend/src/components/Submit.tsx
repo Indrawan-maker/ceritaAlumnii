@@ -1,47 +1,27 @@
 import { useState, useEffect, useRef } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import { FaCat } from "react-icons/fa";
-import { Message, auth } from '../store/auth.ts'
-import { io } from "socket.io-client"
-import type { MessageData } from '../types/index';
+import { authStore } from '../store/authStore.ts'
+import { messageStore } from '../store/messageStore.ts'
 import axios from 'axios'
-import Card from './Card.tsx';
+import { upperFirstText } from '../utils/upperFirstText.ts';
+
 
 export default function Submit() {
 
     const [message, setMessage] = useState('')
     const [title, setTitle] = useState('')
     const [nickname, setNickname] = useState('')
-    const [allMessage, setAllMessage] = useState<MessageData[]>([])
-
     const isMount = useRef(false)
 
+    const { isLoggedIn, user } = authStore()
+    const { isMessageSend } = messageStore()
 
-    useEffect(() => {
-        const socket = io("http://localhost:5174")
-
-        socket.on("connect", () => {
-            console.log(`Socket connected with id: ${socket.id}`)
-        })
-
-        socket.on("new-message", (newMsg) => {
-            setAllMessage(prev => [newMsg, ...prev])
-        })
-
-        return () => { socket.disconnect() }
-    }, [])
-
-
-
-
-    const { isLoggedIn, user } = auth()
-    const { isMessageSend } = Message()
-
-    const users = user ?
-        user.charAt(0).toUpperCase() + user.slice(1) : ''
-
+    const users = user ? upperFirstText(user) : ''
 
     const notifyErr = () => toast.error('login dulu yu!');
+
+
 
     const notifyMessage = () => {
         toast.success(`Judul Cerita ${title} berhasil terkirim!`, {
@@ -79,14 +59,13 @@ export default function Submit() {
                 } else {
                     console.log('data jwt:', res)
                 }
+                console.log("saya  sedang ngecek auth mu")
             } catch (error) {
                 console.log(error)
             }
         }
         checkAuth()
     }, [])
-
-
 
     useEffect(() => {
         if (!users) return
@@ -126,24 +105,17 @@ export default function Submit() {
     async function handleMessage(e: React.SyntheticEvent) {
         e.preventDefault()
         console.log(message)
-        if (isLoggedIn === false) {
-            return notifyErr()
-        }
+        if (!isLoggedIn) return notifyErr()
+        
         try {
-            const token = localStorage.getItem('token')
             const res = await axios.post(
                 'http://localhost:5174/api/messages', {
                 message,
                 title,
                 nickname
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
             }
             )
-            setAllMessage(prev => [res.data, ...prev])
+
             isMessageSend(res.data._id, res.data.message, res.data.title, res.data.nickname)
             console.log(res)
             console.log(res.data)
@@ -209,13 +181,6 @@ export default function Submit() {
                         </div>
                     </div>
                 </form>
-                <div className="mx-auto">
-                    {allMessage.map((message,i) => 
-                    <div key={i}>
-                    <Card title={message.title} nickname={message.nickname} messages={message.message} />
-                    </div>
-                    )}
-                </div>
             </section>
             {toastContainer}
         </>

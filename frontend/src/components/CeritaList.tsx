@@ -34,7 +34,6 @@ const fetching  = async (newSkip = 0) => {
         fetching(0)
     },[])
 
-
 const handleLoadMore = () => {
     const newSkip = skip + 5
     console.log(newSkip)
@@ -42,11 +41,9 @@ const handleLoadMore = () => {
     fetching(newSkip)
 }
 
-
     return (
         <>
         <section className="">
-
             <div className="mt-22">
             <h1 className="text-xl font-bold comfortaa-custom text-center">Cerita dari Alumni-Alumni</h1>
             </div>
@@ -59,7 +56,6 @@ const handleLoadMore = () => {
             )})
             }
         </section>
-        
         <section className="mt-12 comfortaa-custom flex justify-center">
             {loading ? 
             <p>sabar ya..</p>

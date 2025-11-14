@@ -12,8 +12,7 @@ export const io = new Server(server, {
 })
 
 io.on("connection", socket => {
-    console.log(`berhasil connect ke socket brok dengan id ${socket.id}`)
-    socket.emit("chat-message", "socket io is fucking running")
+
 })
 
-export default server
+export { server }

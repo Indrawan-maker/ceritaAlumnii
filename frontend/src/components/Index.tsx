@@ -2,7 +2,7 @@ import Hero from "./Hero"
 import LoginDaftar from "./LoginDaftar";
 import Submit from './Submit';
 import CeritaList from "./CeritaList"
-import { auth } from '../store/auth.ts'
+import { authStore } from '../store/authStore.ts'
 import { GoToProfile } from "./GoToProfile.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import '../index.css'
@@ -10,7 +10,7 @@ import '../index.css'
 import Footer from "./Footer.tsx";
 
 export default function Index() {
-    const { user, isLoggedIn } = auth()
+    const { user, isLoggedIn } = authStore()
 
     console.log(user)
     console.log(isLoggedIn)
